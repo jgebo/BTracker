@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="06ff5239e88843da992572239222625a" Name="Diagram1">
+        <EntityTypeShape EntityType="BTrackerModel.BTUser" Width="1.5" PointX="0.75" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BTrackerModel.Project" Width="1.5" PointX="3.75" PointY="19.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BTrackerModel.ProjectUser" Width="1.5" PointX="3" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BTrackerModel.TicketAttachment" Width="1.5" PointX="6" PointY="11.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BTrackerModel.TicketComment" Width="1.5" PointX="3" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BTrackerModel.TicketHistory" Width="1.5" PointX="3" PointY="15.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BTrackerModel.TicketNotification" Width="1.5" PointX="6" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BTrackerModel.TicketPriority" Width="1.5" PointX="3.75" PointY="21.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BTrackerModel.Ticket" Width="1.5" PointX="6" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BTrackerModel.TicketStatus" Width="1.5" PointX="3.75" PointY="24.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BTrackerModel.TicketType" Width="1.5" PointX="3.75" PointY="26.375" IsExpanded="true" />
+        <AssociationConnector Association="BTrackerModel.FK_ProjectUsers_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="BTrackerModel.FK_TicketAttachments_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="BTrackerModel.FK_TicketComments_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="BTrackerModel.FK_TicketHistories_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="BTrackerModel.FK_TicketNotifications_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="BTrackerModel.FK_Tickets_Assigned_BTName" ManuallyRouted="false" />
+        <AssociationConnector Association="BTrackerModel.FK_Tickets_Owner_BTName" ManuallyRouted="false" />
+        <AssociationConnector Association="BTrackerModel.FK_Tickets_Projects" ManuallyRouted="false" />
+        <AssociationConnector Association="BTrackerModel.FK_Tickets_ProjectUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="BTrackerModel.FK_TicketAttachments_Tickets" ManuallyRouted="false" />
+        <AssociationConnector Association="BTrackerModel.FK_TicketComments_Tickets" ManuallyRouted="false" />
+        <AssociationConnector Association="BTrackerModel.FK_TicketHistories_Tickets" ManuallyRouted="false" />
+        <AssociationConnector Association="BTrackerModel.FK_TicketNotifications_Tickets" ManuallyRouted="false" />
+        <AssociationConnector Association="BTrackerModel.FK_Tickets_Priorities" ManuallyRouted="false" />
+        <AssociationConnector Association="BTrackerModel.FK_Tickets_Statuses" ManuallyRouted="false" />
+        <AssociationConnector Association="BTrackerModel.FK_Tickets_Types" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
