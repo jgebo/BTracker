@@ -19,6 +19,7 @@ namespace BTracker.Controllers
     public class AccountController : Controller
     {
         private ApplicationUserManager _userManager;
+        private BTrackerEntities db = new BTrackerEntities();
 
         public AccountController()
         {
@@ -301,6 +302,26 @@ namespace BTracker.Controllers
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    user.AddUserToRole("Unassigned");
+
+                    BTrackerEntities db = new BTrackerEntities();
+                    BTUser btUser = new BTUser();
+                    btUser.AspNetUserId = user.Id;
+                    btUser.FirstName = model.FirstName;
+                    btUser.LastName = model.LastName;
+                    btUser.UserName = model.Email;
+
+                    // bucket list item : make display names unique
+                    if (model.DisplayName != null)
+                    {
+                        btUser.DisplayName = model.DisplayName;
+                    }
+                    else
+                    {
+                        btUser.DisplayName = model.FirstName + " " + model.LastName;
+                    }
+                    db.BTUsers.Add(btUser);
+                    db.SaveChanges();
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link

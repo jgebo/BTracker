@@ -9,6 +9,7 @@
           <ScalarProperty Name="LastName" ColumnName="LastName" />
           <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
           <ScalarProperty Name="AspNetUserId" ColumnName="AspNetUserId" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -62,7 +63,7 @@
           <ScalarProperty Name="UserName" ColumnName="UserName" />
           <ScalarProperty Name="OldValue" ColumnName="OldValue" />
           <ScalarProperty Name="NewValue" ColumnName="NewValue" />
-          <ScalarProperty Name="Created" ColumnName="Created" />
+          <ScalarProperty Name="Changed" ColumnName="Changed" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -74,7 +75,7 @@
           <ScalarProperty Name="UserName" ColumnName="UserName" />
           <ScalarProperty Name="SentToId" ColumnName="SentToId" />
           <ScalarProperty Name="SentFromId" ColumnName="SentFromId" />
-          <ScalarProperty Name="SentO" ColumnName="SentO" />
+          <ScalarProperty Name="SendDate" ColumnName="SendDate" />
           <ScalarProperty Name="HasBeenSent" ColumnName="HasBeenSent" />
         </MappingFragment>
       </EntityTypeMapping>

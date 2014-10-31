@@ -9,6 +9,7 @@
     <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="DisplayName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="AspNetUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="256" FixedLength="true" Unicode="true" Nullable="false" />
     <NavigationProperty Name="ProjectUsers" Relationship="Self.FK_ProjectUsers_Users" FromRole="BTUsers" ToRole="ProjectUsers" />
     <NavigationProperty Name="TicketAttachments" Relationship="Self.FK_TicketAttachments_Users" FromRole="BTUsers" ToRole="TicketAttachments" />
     <NavigationProperty Name="TicketComments" Relationship="Self.FK_TicketComments_Users" FromRole="BTUsers" ToRole="TicketComments" />
@@ -72,7 +73,7 @@
     <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="OldValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="NewValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="2" />
+    <Property Name="Changed" Type="DateTimeOffset" Nullable="false" Precision="2" />
     <NavigationProperty Name="BTUser" Relationship="Self.FK_TicketHistories_Users" FromRole="TicketHistories" ToRole="BTUsers" />
     <NavigationProperty Name="Ticket" Relationship="Self.FK_TicketHistories_Tickets" FromRole="TicketHistories" ToRole="Tickets" />
   </EntityType>
@@ -85,7 +86,7 @@
     <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="SentToId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="SentFromId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="SentO" Type="DateTimeOffset" Precision="2" />
+    <Property Name="SendDate" Type="DateTimeOffset" Precision="2" />
     <Property Name="HasBeenSent" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="BTUser" Relationship="Self.FK_TicketNotifications_Users" FromRole="TicketNotifications" ToRole="BTUsers" />
     <NavigationProperty Name="Ticket" Relationship="Self.FK_TicketNotifications_Tickets" FromRole="TicketNotifications" ToRole="Tickets" />

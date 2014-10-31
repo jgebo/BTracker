@@ -72,21 +72,34 @@ namespace BTracker
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
 
-            if (!roleManager.RoleExists("Administrator"))
+            if (!roleManager.RoleExists("AdminSeed"))
             {
-                roleManager.Create(new IdentityRole("Administrator"));
+                roleManager.Create(new IdentityRole("AdminSeed"));
             }
 
             //  var user = new ApplicationUser { UserName = "AdminUser", Email = "admin@codefoundry.com" };
-            var user = new ApplicationUser { UserName = "Administrator", Email = "admin@codefoundry.com" };
+            var user = new ApplicationUser { UserName = "AdminSeed", Email = "adminseed@cf.com" };
 
-            if (userManager.FindByName("AdminUser") == null)
+            if (userManager.FindByName("AdminSeed") == null)
             {
                 var result = userManager.Create(user, "Password-1");
                 if (result.Succeeded)
                 {
-                    userManager.AddToRole(user.Id, "Administrator");
-                }
+                    userManager.AddToRole(user.Id, "AdminSeed");
+
+                    // add to seed BTUser
+                    BTrackerEntities db = new BTrackerEntities();
+                    BTUser btUser = new BTUser();
+                    btUser.AspNetUserId = user.Id;
+                    btUser.FirstName = "Admin";
+                    btUser.LastName = "Seed";
+                    btUser.UserName = "AdminSeed";
+                    btUser.Email = user.Email;
+                    btUser.DisplayName = btUser.FirstName + " " + btUser.LastName;
+                    db.BTUsers.Add(btUser);
+                    db.SaveChanges();
+                    // end add to seed BTUser
+               }
             }
         }
     }

@@ -30,6 +30,7 @@ namespace BTracker.Models
         public string LastName { get; set; }
         public string DisplayName { get; set; }
         public string AspNetUserId { get; set; }
+        public string Email { get; set; }
     
         public virtual ICollection<ProjectUser> ProjectUsers { get; set; }
         public virtual ICollection<TicketAttachment> TicketAttachments { get; set; }

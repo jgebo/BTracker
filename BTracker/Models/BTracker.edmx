@@ -14,6 +14,7 @@
           <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="DisplayName" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="AspNetUserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Email" Type="nchar" MaxLength="256" Nullable="false" />
         </EntityType>
         <EntityType Name="Projects">
           <Key>
@@ -62,7 +63,7 @@
           <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="OldValue" Type="nvarchar(max)" Nullable="false" />
           <Property Name="NewValue" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Created" Type="datetimeoffset" Precision="2" Nullable="false" />
+          <Property Name="Changed" Type="datetimeoffset" Precision="2" Nullable="false" />
         </EntityType>
         <EntityType Name="TicketNotifications">
           <Key>
@@ -73,7 +74,7 @@
           <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="SentToId" Type="nvarchar" MaxLength="50" />
           <Property Name="SentFromId" Type="nvarchar" MaxLength="50" />
-          <Property Name="SentO" Type="datetimeoffset" Precision="2" />
+          <Property Name="SendDate" Type="datetimeoffset" Precision="2" />
           <Property Name="HasBeenSent" Type="nvarchar" MaxLength="1" />
         </EntityType>
         <EntityType Name="TicketPriorities">
@@ -396,6 +397,7 @@
           <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="DisplayName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="AspNetUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="true" Unicode="true" Nullable="false" />
           <NavigationProperty Name="ProjectUsers" Relationship="Self.FK_ProjectUsers_Users" FromRole="BTUsers" ToRole="ProjectUsers" />
           <NavigationProperty Name="TicketAttachments" Relationship="Self.FK_TicketAttachments_Users" FromRole="BTUsers" ToRole="TicketAttachments" />
           <NavigationProperty Name="TicketComments" Relationship="Self.FK_TicketComments_Users" FromRole="BTUsers" ToRole="TicketComments" />
@@ -459,7 +461,7 @@
           <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="OldValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="NewValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="2" />
+          <Property Name="Changed" Type="DateTimeOffset" Nullable="false" Precision="2" />
           <NavigationProperty Name="BTUser" Relationship="Self.FK_TicketHistories_Users" FromRole="TicketHistories" ToRole="BTUsers" />
           <NavigationProperty Name="Ticket" Relationship="Self.FK_TicketHistories_Tickets" FromRole="TicketHistories" ToRole="Tickets" />
         </EntityType>
@@ -472,7 +474,7 @@
           <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="SentToId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SentFromId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SentO" Type="DateTimeOffset" Precision="2" />
+          <Property Name="SendDate" Type="DateTimeOffset" Precision="2" />
           <Property Name="HasBeenSent" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="BTUser" Relationship="Self.FK_TicketNotifications_Users" FromRole="TicketNotifications" ToRole="BTUsers" />
           <NavigationProperty Name="Ticket" Relationship="Self.FK_TicketNotifications_Tickets" FromRole="TicketNotifications" ToRole="Tickets" />
@@ -810,6 +812,7 @@
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
                 <ScalarProperty Name="AspNetUserId" ColumnName="AspNetUserId" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -863,7 +866,7 @@
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="OldValue" ColumnName="OldValue" />
                 <ScalarProperty Name="NewValue" ColumnName="NewValue" />
-                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="Changed" ColumnName="Changed" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -875,7 +878,7 @@
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="SentToId" ColumnName="SentToId" />
                 <ScalarProperty Name="SentFromId" ColumnName="SentFromId" />
-                <ScalarProperty Name="SentO" ColumnName="SentO" />
+                <ScalarProperty Name="SendDate" ColumnName="SendDate" />
                 <ScalarProperty Name="HasBeenSent" ColumnName="HasBeenSent" />
               </MappingFragment>
             </EntityTypeMapping>

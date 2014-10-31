@@ -20,7 +20,7 @@ namespace BTracker.Models
         public string UserName { get; set; }
         public string OldValue { get; set; }
         public string NewValue { get; set; }
-        public System.DateTimeOffset Created { get; set; }
+        public System.DateTimeOffset Changed { get; set; }
     
         public virtual BTUser BTUser { get; set; }
         public virtual Ticket Ticket { get; set; }

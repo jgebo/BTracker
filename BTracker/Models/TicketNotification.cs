@@ -19,7 +19,7 @@ namespace BTracker.Models
         public string UserName { get; set; }
         public string SentToId { get; set; }
         public string SentFromId { get; set; }
-        public Nullable<System.DateTimeOffset> SentO { get; set; }
+        public Nullable<System.DateTimeOffset> SendDate { get; set; }
         public string HasBeenSent { get; set; }
     
         public virtual BTUser BTUser { get; set; }
