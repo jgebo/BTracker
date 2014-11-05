@@ -15,12 +15,20 @@ namespace BTracker.Controllers
         private BTrackerEntities db = new BTrackerEntities();
 
         // GET: BTUsers
+         [Authorize(Roles = "Administrator, Demo")]
         public ActionResult Index()
         {
+             if (User.IsInRole("Demo"))
+             {
+                 var demo = "demo@demo.com";
+                 return View(db.BTUsers.Where(u => u.UserName == demo).ToList());
+             }
+
             return View(db.BTUsers.ToList());
         }
 
         // GET: BTUsers/Details/5
+         [Authorize(Roles = "Administrator, Demo")]
         public ActionResult Details(string id)
         {
             if (id == null)
@@ -36,6 +44,7 @@ namespace BTracker.Controllers
         }
 
         // GET: BTUsers/Create
+         [Authorize(Roles = "None")]
         public ActionResult Create()
         {
             return View();
@@ -44,6 +53,7 @@ namespace BTracker.Controllers
         // POST: BTUsers/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "None")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "UserName,FirstName,LastName,DisplayName,AspNetUserId")] BTUser bTUser)
@@ -59,6 +69,7 @@ namespace BTracker.Controllers
         }
 
         // GET: BTUsers/Edit/5
+         [Authorize(Roles = "None")]
         public ActionResult Edit(string id)
         {
             if (id == null)
@@ -76,6 +87,7 @@ namespace BTracker.Controllers
         // POST: BTUsers/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "None")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "UserName,FirstName,LastName,DisplayName,AspNetUserId")] BTUser bTUser)
@@ -90,6 +102,7 @@ namespace BTracker.Controllers
         }
 
         // GET: BTUsers/Delete/5
+         [Authorize(Roles = "None")]
         public ActionResult Delete(string id)
         {
             if (id == null)
@@ -105,6 +118,7 @@ namespace BTracker.Controllers
         }
 
         // POST: BTUsers/Delete/5
+         [Authorize(Roles = "None")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)

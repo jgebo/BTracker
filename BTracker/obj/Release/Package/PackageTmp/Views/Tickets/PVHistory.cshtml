@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "PViewHistory";
+}
+
+@* add tables for ticket Comments, Attacments, History *@
+
+<div class="form-group">
+    @*<div style="width:700px;height:80px;overflow:auto">*@
+        @*<h4>Ticket History</h4>*@
+        <table>
+            <tr>
+                <th class="col-md-4" colspan="50">
+                    
+                    Created
+                </th>
+                <th class="col-md-4" colspan="50">
+                    
+                    Created By
+                </th>
+                <th class="col-md-4" colspan="50">
+                    Property
+                @*</th>
+                <th class="col-md-3" colspan="50">
+                </th>*@
+            </tr>
+        </table>
+        @*</div>*@
+        <div style="width:700px;height:80px;overflow:auto">
+        <table>
+            @foreach (var item in Model.TicketHistories)
+            {
+                <tr>
+                    <td class="col-md-3" colspan="50">
+                        @item.Changed.LocalDateTime
+                    </td>
+                    <td class="col-md-3" colspan="50">
+                        @item.BTUser.DisplayName
+                    </td>
+                    <td class="col-md-3" colspan="50">
+                        @item.Property
+                    </td>
+                    <td class="col-md-3" colspan="50">
+                        @Html.ActionLink("Details", "Details", "TicketHistories", new { id = item.Id, projectid = ViewBag.pid }, null)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+<hr />

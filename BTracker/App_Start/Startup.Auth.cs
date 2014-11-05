@@ -71,29 +71,45 @@ namespace BTracker
 
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
-
-            if (!roleManager.RoleExists("AdminSeed"))
+         
+            if (!roleManager.RoleExists("Adminstrator"))
             {
-                roleManager.Create(new IdentityRole("AdminSeed"));
+                roleManager.Create(new IdentityRole("Administrator"));
+            }
+            if (!roleManager.RoleExists("Developer"))
+            {
+                roleManager.Create(new IdentityRole("Developer"));
+            }
+            if (!roleManager.RoleExists("Project Manager"))
+            {
+                roleManager.Create(new IdentityRole("Project Manager"));
+            }
+            if (!roleManager.RoleExists("Unassigned"))
+            {
+                roleManager.Create(new IdentityRole("Unassigned"));
+            }
+            if (!roleManager.RoleExists("Submitter"))
+            {
+                roleManager.Create(new IdentityRole("Submitter"));
             }
 
             //  var user = new ApplicationUser { UserName = "AdminUser", Email = "admin@codefoundry.com" };
-            var user = new ApplicationUser { UserName = "AdminSeed", Email = "adminseed@cf.com" };
+            var user = new ApplicationUser { UserName = "Admin", Email = "admin@cf.com" };
 
-            if (userManager.FindByName("AdminSeed") == null)
+            if (userManager.FindByName("Admin") == null)
             {
                 var result = userManager.Create(user, "Password-1");
                 if (result.Succeeded)
                 {
-                    userManager.AddToRole(user.Id, "AdminSeed");
-
+                    userManager.AddToRole(user.Id, "Administrator");
+                                       
                     // add to seed BTUser
                     BTrackerEntities db = new BTrackerEntities();
                     BTUser btUser = new BTUser();
                     btUser.AspNetUserId = user.Id;
                     btUser.FirstName = "Admin";
                     btUser.LastName = "Seed";
-                    btUser.UserName = "AdminSeed";
+                    btUser.UserName = "Admin";
                     btUser.Email = user.Email;
                     btUser.DisplayName = btUser.FirstName + " " + btUser.LastName;
                     db.BTUsers.Add(btUser);

@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using BTracker.Models;
+using System.IO;
 
 namespace BTracker.Controllers
 {
@@ -15,6 +16,7 @@ namespace BTracker.Controllers
         private BTrackerEntities db = new BTrackerEntities();
 
         // GET: TicketAttachments
+        [Authorize(Roles = "Administrator, Developer, Submitter, Demo")]
         public ActionResult Index()
         {
             var ticketAttachments = db.TicketAttachments.Include(t => t.BTUser).Include(t => t.Ticket);
@@ -37,34 +39,40 @@ namespace BTracker.Controllers
         }
 
         // GET: TicketAttachments/Create
-        public ActionResult Create()
+        [Authorize(Roles = "Administrator, Developer, Submitter, Demo")]
+        public ActionResult Create(int id)
         {
-            ViewBag.UserName = new SelectList(db.BTUsers, "UserName", "FirstName");
-            ViewBag.TicketId = new SelectList(db.Tickets, "Id", "Title");
-            return View();
+            //ViewBag.UserName = new SelectList(db.BTUsers, "UserName", "FirstName");
+            //ViewBag.TicketId = new SelectList(db.Tickets, "Id", "Title");
+            //return View();
+            var ticketAttachment = new TicketAttachment();
+            ticketAttachment.TicketId = id;
+            ticketAttachment.Ticket = db.Tickets.Find(id);
+            ticketAttachment.Created = DateTimeOffset.Now;
+            ticketAttachment.BTUser = db.BTUsers.Find(User.Identity.Name);
+            ticketAttachment.UserName = User.Identity.Name;
+            return View(ticketAttachment);
+
         }
 
         // POST: TicketAttachments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Administrator, Developer, Submitter")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,TicketId,Description,UserName,FilePath,FileUrl,Created")] TicketAttachment ticketAttachment)
+        public ActionResult Create([Bind(Include = "Id,TicketId,FilePath,Description,Created,UserName,FileUrl")] TicketAttachment ticketAttachment, HttpPostedFileBase fileUpload)
+          //   public ActionResult Create([Bind(Include = "Id,TicketId,Description,UserName,FilePath,FileUrl,Created")] TicketAttachment ticketAttachment)
         {
             if (ModelState.IsValid)
             {
-                db.TicketAttachments.Add(ticketAttachment);
-                              
-                db.TicketHistories.Add(new TicketHistory
-                {
-                    Property = "New Ticket Status",
-                    Changed = DateTimeOffset.Now,
-                    UserName = User.Identity.Name,
-                    TicketId = ticketAttachment.TicketId,
-                    OldValue = " ",
-                    NewValue = ticketAttachment.Description
-                });
+                var fileName = Path.GetFileName(fileUpload.FileName);
+                ticketAttachment.FilePath = Path.Combine(Server.MapPath("~/Attachments/"), fileName);
+                fileUpload.SaveAs(ticketAttachment.FilePath);
+                ticketAttachment.FileUrl = "~/Attachments/" + fileName;
 
+                ticketAttachment.Created = DateTimeOffset.Now;
+                db.TicketAttachments.Add(ticketAttachment);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -75,6 +83,7 @@ namespace BTracker.Controllers
         }
 
         // GET: TicketAttachments/Edit/5
+        [Authorize(Roles = "Administrator, Developer, Submitter, Demo")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -94,12 +103,14 @@ namespace BTracker.Controllers
         // POST: TicketAttachments/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Administrator, Developer, Submitter")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,TicketId,Description,UserName,FilePath,FileUrl,Created")] TicketAttachment ticketAttachment)
         {
             if (ModelState.IsValid)
             {
+                ticketAttachment.Created = DateTimeOffset.Now;
                 db.Entry(ticketAttachment).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -110,6 +121,7 @@ namespace BTracker.Controllers
         }
 
         // GET: TicketAttachments/Delete/5
+        [Authorize(Roles = "Administrator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -125,6 +137,7 @@ namespace BTracker.Controllers
         }
 
         // POST: TicketAttachments/Delete/5
+         [Authorize(Roles = "Administrator")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

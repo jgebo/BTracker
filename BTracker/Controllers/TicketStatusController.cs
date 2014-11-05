@@ -15,12 +15,14 @@ namespace BTracker
         private BTrackerEntities db = new BTrackerEntities();
 
         // GET: TicketStatus
+         [Authorize(Roles = "Administrator, Developer, Submitter, Demo")]
         public ActionResult Index()
         {
             return View(db.TicketStatuses.ToList());
         }
 
         // GET: TicketStatus/Details/5
+         [Authorize(Roles = "Administrator, Developer, Submitter, Demo")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -36,6 +38,7 @@ namespace BTracker
         }
 
         // GET: TicketStatus/Create
+         [Authorize(Roles = "Administrator, Developer, Submitter, Demo")]
         public ActionResult Create()
         {
             return View();
@@ -44,6 +47,7 @@ namespace BTracker
         // POST: TicketStatus/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Administrator, Developer, Submitter")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name")] TicketStatus ticketStatus)
@@ -52,18 +56,6 @@ namespace BTracker
             {
                 db.TicketStatuses.Add(ticketStatus);
                 db.SaveChanges();
-                              
-                db.TicketHistories.Add(new TicketHistory
-                {
-                    Property = "New Ticket Status",
-                    Changed = DateTimeOffset.Now,
-                    UserName = User.Identity.Name,
-                    TicketId = ticketStatus.Id,
-                    OldValue = "N/A",
-                    NewValue = ticketStatus.Name
-                });
-
-                db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -71,6 +63,7 @@ namespace BTracker
         }
 
         // GET: TicketStatus/Edit/5
+         [Authorize(Roles = "Administrator, Developer, Submitter, Demo")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -88,6 +81,7 @@ namespace BTracker
         // POST: TicketStatus/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Administrator, Developer, Submitter")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Name")] TicketStatus ticketStatus)
@@ -102,6 +96,7 @@ namespace BTracker
         }
 
         // GET: TicketStatus/Delete/5
+         [Authorize(Roles = "Administrator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -117,6 +112,7 @@ namespace BTracker
         }
 
         // POST: TicketStatus/Delete/5
+         [Authorize(Roles = "Administrator")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

@@ -15,12 +15,14 @@ namespace BTracker.Controllers
         private BTrackerEntities db = new BTrackerEntities();
 
         // GET: Projects
+         [Authorize(Roles = "Administrator, Project Manager, Demo")]
         public ActionResult Index()
         {
             return View(db.Projects.ToList());
         }
 
         // GET: Projects/Details/5
+         [Authorize(Roles = "Administrator, Project Manager, Demo")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -36,6 +38,7 @@ namespace BTracker.Controllers
         }
 
         // GET: Projects/Create
+         [Authorize(Roles = "Administrator, Project Manager, Demo")]
         public ActionResult Create()
         {
             return View();
@@ -44,6 +47,7 @@ namespace BTracker.Controllers
         // POST: Projects/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Administrator, Project Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name")] Project project)
@@ -51,17 +55,6 @@ namespace BTracker.Controllers
             if (ModelState.IsValid)
             {
                 db.Projects.Add(project);
-
-                db.TicketHistories.Add(new TicketHistory
-                {
-                    Property = "New Project",
-                    Changed = DateTimeOffset.Now,
-                    UserName = User.Identity.Name,
-                    TicketId = project.Id,
-                    OldValue = " ",
-                    NewValue = project.Name
-                });
-
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -70,6 +63,7 @@ namespace BTracker.Controllers
         }
 
         // GET: Projects/Edit/5
+        [Authorize(Roles = "Administrator, Project Manager, Demo")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -87,6 +81,7 @@ namespace BTracker.Controllers
         // POST: Projects/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+         [Authorize(Roles = "Administrator, Project Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Name")] Project project)
@@ -101,6 +96,7 @@ namespace BTracker.Controllers
         }
 
         // GET: Projects/Delete/5
+        [Authorize(Roles = "Administrator, Project Manager, Demo")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -116,6 +112,7 @@ namespace BTracker.Controllers
         }
 
         // POST: Projects/Delete/5
+         [Authorize(Roles = "Administrator,Project Manager")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

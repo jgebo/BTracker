@@ -31,7 +31,7 @@ namespace BTracker.Models
         public int PriorityId { get; set; }
         public int TypeId { get; set; }
         public int ProjectId { get; set; }
-        public System.DateTimeOffset CreatedOn { get; set; }
+        public Nullable<System.DateTimeOffset> CreatedOn { get; set; }
         public Nullable<System.DateTimeOffset> UpdatedOn { get; set; }
     
         public virtual BTUser BTUser { get; set; }

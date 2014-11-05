@@ -12,6 +12,7 @@ using BTracker.Models;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Data.Entity;
 
 namespace BTracker.Controllers
 {
@@ -45,7 +46,7 @@ namespace BTracker.Controllers
 
         //
         // GET: /Account/ListRoles
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Demo")]
         public ActionResult ListRoles()
         {
             var db = new ApplicationDbContext();
@@ -57,9 +58,115 @@ namespace BTracker.Controllers
             return View(model);
         }
 
+        // GET: Roles/Create
+        [Authorize(Roles = "Administrator, Demo")]
+        public ActionResult CreateRole()
+        {
+            return View();
+        }
+
+        // POST: Roles/Create
+        [Authorize(Roles = "Administrator")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateRole(RoleViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.RoleName == null || (model.RoleName.Trim().Length == 0))
+                {
+                    ModelState.AddModelError("", "Role Name Required!");
+                }
+
+                if (ModelState.IsValid)
+                {
+                    var db = new ApplicationDbContext();
+                    var result = db.Roles.Add(new IdentityRole(model.RoleName));
+                    if (result != null)
+                    {
+                        db.SaveChanges();
+                        return RedirectToAction("ListRoles");
+                    }
+                }
+            }
+            // if we got this far, something has gone wrong... return to Create View  
+            return View(model);
+        }
+
+        // GET: Roles/Edit/5
+        [Authorize(Roles = "Administrator, Demo")]
+        public ActionResult EditRole(string roleid)
+        {
+            var db = new ApplicationDbContext();
+            var role = db.Roles.Find(roleid);
+            var model = new RoleViewModel();
+            model.RoleName = role.Name;
+            model.RoleId = role.Id;
+            return View(model);
+        }
+
+        // POST: Roles/Edit/5
+        [Authorize(Roles = "Administrator")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditRole(RoleViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.RoleName == null || (model.RoleName.Trim().Length == 0))
+                {
+                    ModelState.AddModelError("", "Role Name Required!");
+                }
+
+                if (ModelState.IsValid)
+                {
+                    var db = new ApplicationDbContext();
+                    var role = db.Roles.Find(model.RoleId);
+                    // change role name to match whats in the model
+                    role.Name = model.RoleName;
+                    // tell the DB the role entry has been modified
+                    db.Entry(role).State = EntityState.Modified;
+                    // save the changes
+                    db.SaveChanges();
+                    return RedirectToAction("ListRoles");
+                }
+            }
+            return View(model);
+        }
+
+        // GET: Roles/Delete/5
+        [Authorize(Roles = "Administrator, Demo")]
+        public ActionResult DeleteRole(string roleid)
+        {
+            var db = new ApplicationDbContext();
+            var role = db.Roles.Find(roleid);
+            var model = new RoleViewModel();
+            model.RoleName = role.Name;
+            model.RoleId = role.Id;
+            return View(model);
+        }
+
+        // POST: Roles/Delete/5
+        [Authorize(Roles = "Administrator")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteRole(RoleViewModel model)
+        {
+            var db = new ApplicationDbContext();
+            var role = db.Roles.Find(model.RoleId);
+            // change role name to match whats in the model
+            role.Name = model.RoleName;
+            // tell the DB the role entry has been modified
+            db.Roles.Remove(role);
+            // save the changes
+            db.SaveChanges();
+            // redirect control back to the roles list view
+            return RedirectToAction("ListRoles");
+        }
+
         //
         // GET: /Account/AssignUserRole
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Demo")]
         public ActionResult AssignUserRole(string roleid)
         {
             //ViewBag.Message = (string)TempData["ListError"];
@@ -117,7 +224,7 @@ namespace BTracker.Controllers
 
         //
         // GET: /Account/UnassignUserRole
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Demo")]
         public ActionResult UnassignUserRole(string roleid)
         {
             //ViewBag.Message = (string)TempData["ListError"];
@@ -301,8 +408,8 @@ namespace BTracker.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                    user.AddUserToRole("Unassigned");
+                    //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    //user.AddUserToRole("Unassigned");
 
                     BTrackerEntities db = new BTrackerEntities();
                     BTUser btUser = new BTUser();
@@ -310,6 +417,7 @@ namespace BTracker.Controllers
                     btUser.FirstName = model.FirstName;
                     btUser.LastName = model.LastName;
                     btUser.UserName = model.Email;
+                    btUser.Email = model.Email;
 
                     // bucket list item : make display names unique
                     if (model.DisplayName != null)
@@ -353,6 +461,7 @@ namespace BTracker.Controllers
 
         //
         // GET: /Account/ForgotPassword
+         [Authorize(Roles = "Administrator")]
         [AllowAnonymous]
         public ActionResult ForgotPassword()
         {
@@ -361,6 +470,7 @@ namespace BTracker.Controllers
 
         //
         // POST: /Account/ForgotPassword
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -389,6 +499,7 @@ namespace BTracker.Controllers
 
         //
         // GET: /Account/ForgotPasswordConfirmation
+        [Authorize(Roles = "Administrator")]
         [AllowAnonymous]
         public ActionResult ForgotPasswordConfirmation()
         {
@@ -397,6 +508,7 @@ namespace BTracker.Controllers
 
         //
         // GET: /Account/ResetPassword
+        [Authorize(Roles = "Administrator")]
         [AllowAnonymous]
         public ActionResult ResetPassword(string code)
         {
@@ -405,6 +517,7 @@ namespace BTracker.Controllers
 
         //
         // POST: /Account/ResetPassword
+         [Authorize(Roles = "Administrator")]
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -431,6 +544,7 @@ namespace BTracker.Controllers
 
         //
         // GET: /Account/ResetPasswordConfirmation
+        [Authorize(Roles = "Administrator")]
         [AllowAnonymous]
         public ActionResult ResetPasswordConfirmation()
         {

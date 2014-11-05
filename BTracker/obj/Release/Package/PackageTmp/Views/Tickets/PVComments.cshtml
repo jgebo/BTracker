@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "PViewComments";
+}
+
+
+@* add tables for ticket Comments, Attacments, History *@
+<div class="form-group">
+    @*<h4>Ticket Comments</h4>*@
+    <table>
+        <tr>
+            <th class="col-md-4">
+                Date Created
+            </th>
+            <th class="col-md-4">
+                Created By
+            </th>
+            <th class="col-md-4">
+                Teaser
+            </th>
+            <th class="col-md-4">
+            </th>
+        </tr>
+    </table>
+    <div style="width:700px;height:80px;overflow:auto">
+        <table>
+            @foreach (var item in Model.TicketComments)
+            {
+                <tr>
+                    <td class="col-md-4">
+                        @item.Created.LocalDateTime
+                    </td>
+                    <td class="col-md-4">
+                        @item.BTUser.DisplayName
+                    </td>
+                    <td class="col-md-4">
+                        @if (item.Comment.Length < 25)
+                        {
+                            @item.Comment
+                        }
+                        else
+                        {
+                            @item.Comment.Substring(0, 24)
+                        }
+                    </td>
+                    <td class="col-md-4">
+                        @Html.ActionLink("Details", "Details", "TicketComments", new { id = item.Id, projectid = ViewBag.pid }, null)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+<hr />

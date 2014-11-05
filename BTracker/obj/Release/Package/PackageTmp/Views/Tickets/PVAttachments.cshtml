@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewBag.Title = "PVAttachments";
+}
+
+
+@* add tables for ticket Comments, Attacments, History *@
+
+<div class="form-group" >
+    @*<h4>Ticket Attachments</h4>*@
+    <table>
+        <tr>
+            <th class="col-md-4">
+                Created
+            </th>
+            <th class="col-md-4">
+                Created By
+            </th>
+            <th class="col-md-4">
+                FileName
+            </th>
+            <th class="col-md-4">
+            </th>
+        </tr>
+    </table>
+    <div style="width:700px;height:80px;overflow:auto" >
+        <table>
+            @foreach (var item in Model.TicketAttachments)
+            {
+                <tr>
+                    <td class="col-md-4" >
+                        @item.Created.LocalDateTime
+                    </td>
+                    <td class="col-md-4">
+                        @item.BTUser.DisplayName
+                    </td>
+                    <td class="col-md-4">
+                        <a href="@Url.Content(item.FileUrl)" target=" _blank">@item.FileUrl.Substring(14)</a>
+                    </td>
+                    <td class="col-md-4">
+                        @Html.ActionLink("Details", "Details", "TicketAttachments", new { id = item.Id, projectid = ViewBag.pid }, null)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+<hr />
+   

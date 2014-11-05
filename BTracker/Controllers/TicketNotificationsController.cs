@@ -15,6 +15,7 @@ namespace BTracker.Controllers
         private BTrackerEntities db = new BTrackerEntities();
 
         // GET: TicketNotifications
+         [Authorize(Roles = "Administrator, Developer, Submitter, Demo")]
         public ActionResult Index()
         {
             var ticketNotifications = db.TicketNotifications.Include(t => t.BTUser).Include(t => t.Ticket);
@@ -22,6 +23,7 @@ namespace BTracker.Controllers
         }
 
         // GET: TicketNotifications/Details/5
+         [Authorize(Roles = "Administrator, Developer, Submitter, Demo")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,6 +39,7 @@ namespace BTracker.Controllers
         }
 
         // GET: TicketNotifications/Create
+         [Authorize(Roles = "Administrator, Developer, Submitter, Demo")]
         public ActionResult Create()
         {
             ViewBag.UserName = new SelectList(db.BTUsers, "UserName", "FirstName");
@@ -47,6 +50,7 @@ namespace BTracker.Controllers
         // POST: TicketNotifications/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+       [Authorize(Roles = "Administrator, Developer, Submitter")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,TicketId,UserName,SentToId,SentFromId,SentO,HasBeenSent")] TicketNotification ticketNotification)
@@ -54,17 +58,6 @@ namespace BTracker.Controllers
             if (ModelState.IsValid)
             {
                 db.TicketNotifications.Add(ticketNotification);
-             
-                db.TicketHistories.Add(new TicketHistory
-                {
-                    Property = "New Ticket Notification",
-                    Changed = DateTimeOffset.Now,
-                    UserName = User.Identity.Name,
-                    TicketId = ticketNotification.Id,
-                    OldValue = " ",
-                    NewValue = ticketNotification.HasBeenSent
-                });
-
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -75,6 +68,7 @@ namespace BTracker.Controllers
         }
 
         // GET: TicketNotifications/Edit/5
+        [Authorize(Roles = "Administrator, Developer, Submitter, Demo")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -96,6 +90,7 @@ namespace BTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator, Developer, Submitter")]
         public ActionResult Edit([Bind(Include = "Id,TicketId,UserName,SentToId,SentFromId,SentO,HasBeenSent")] TicketNotification ticketNotification)
         {
             if (ModelState.IsValid)
@@ -110,6 +105,7 @@ namespace BTracker.Controllers
         }
 
         // GET: TicketNotifications/Delete/5
+         [Authorize(Roles = "Administrator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -125,6 +121,7 @@ namespace BTracker.Controllers
         }
 
         // POST: TicketNotifications/Delete/5
+         [Authorize(Roles = "Administrator")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

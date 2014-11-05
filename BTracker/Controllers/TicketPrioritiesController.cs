@@ -8,19 +8,21 @@ using System.Web;
 using System.Web.Mvc;
 using BTracker.Models;
 
-namespace BTracker.Controllers
+namespace BTracker
 {
     public class TicketPrioritiesController : Controller
     {
         private BTrackerEntities db = new BTrackerEntities();
 
-        // GET: TicketPriorities
+        // GET: TicketPriority
+        [Authorize(Roles = "Administrator, Developer, Submitter, Demo")]
         public ActionResult Index()
         {
             return View(db.TicketPriorities.ToList());
         }
 
-        // GET: TicketPriorities/Details/5
+        // GET: TicketPriority/Details/5
+        [Authorize(Roles = "Administrator, Developer, Submitter, Demo")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -35,42 +37,32 @@ namespace BTracker.Controllers
             return View(ticketPriority);
         }
 
-        // GET: TicketPriorities/Create
+        // GET: TicketPriority/Create
+        [Authorize(Roles = "Administrator, Developer, Submitter, Demo")]
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: TicketPriorities/Create
+        // POST: TicketPriority/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name")] TicketPriority ticketPriority)
+        public ActionResult Create([Bind(Include = "Id,Name,Description")] TicketPriority ticketPriority)
         {
             if (ModelState.IsValid)
             {
                 db.TicketPriorities.Add(ticketPriority);
-              
-                db.TicketHistories.Add(new TicketHistory
-                {
-                    Property = "New Ticket Priority",
-                    Changed = DateTimeOffset.Now,
-                    UserName = User.Identity.Name,
-                    TicketId = ticketPriority.Id,
-                    OldValue = " ",
-                    NewValue = ticketPriority.Name
-                });
-
                 db.SaveChanges();
                 return RedirectToAction("Index");
-
             }
 
             return View(ticketPriority);
         }
 
-        // GET: TicketPriorities/Edit/5
+        // GET: TicketPriority/Edit/5
+        [Authorize(Roles = "Administrator, Developer, Submitter, Demo")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -85,12 +77,13 @@ namespace BTracker.Controllers
             return View(ticketPriority);
         }
 
-        // POST: TicketPriorities/Edit/5
+        // POST: TicketPriority/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Administrator, Developer, Submitter")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name")] TicketPriority ticketPriority)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description")] TicketPriority ticketPriority)
         {
             if (ModelState.IsValid)
             {
@@ -101,7 +94,8 @@ namespace BTracker.Controllers
             return View(ticketPriority);
         }
 
-        // GET: TicketPriorities/Delete/5
+        // GET: TicketPriority/Delete/5
+         [Authorize(Roles = "Administrator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -116,7 +110,8 @@ namespace BTracker.Controllers
             return View(ticketPriority);
         }
 
-        // POST: TicketPriorities/Delete/5
+        // POST: TicketPriority/Delete/5
+        [Authorize(Roles = "Administrator")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

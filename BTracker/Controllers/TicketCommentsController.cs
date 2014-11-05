@@ -15,6 +15,7 @@ namespace BTracker.Controllers
         private BTrackerEntities db = new BTrackerEntities();
 
         // GET: TicketComments
+        [Authorize(Roles = "Administrator, Developer, Submitter, Demo")]
         public ActionResult Index()
         {
             var ticketComments = db.TicketComments.Include(t => t.BTUser).Include(t => t.Ticket);
@@ -22,6 +23,7 @@ namespace BTracker.Controllers
         }
 
         // GET: TicketComments/Details/5
+         [Authorize(Roles = "Administrator, Developer, Submitter, Demo")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,36 +39,41 @@ namespace BTracker.Controllers
         }
 
         // GET: TicketComments/Create
-        public ActionResult Create()
+        [Authorize(Roles = "Administrator, Developer, Submitter, Demo")]
+        public ActionResult Create(int? id)
         {
-            ViewBag.UserName = new SelectList(db.BTUsers, "UserName", "FirstName");
-            ViewBag.TicketId = new SelectList(db.Tickets, "Id", "Title");
-            return View();
+            //ViewBag.UserName = new SelectList(db.BTUsers, "UserName", "FirstName");
+            //ViewBag.TicketId = new SelectList(db.Tickets, "Id", "Title");
+            //return View();
+
+            Ticket ticket = db.Tickets.Find(id);
+
+            TicketComment ticketComment = new TicketComment();
+            ticketComment.TicketId = ticket.Id;
+            ticketComment.UserName = ticket.BTUser.UserName;
+
+
+            //ViewBag.UserName = new SelectList(db.BTUsers, "UserName", "FirstName", ticketComment.UserName);
+            ViewBag.TicketId = id; // new SelectList(db.Tickets, "Id", "Title", ticketComment.TicketId);
+            //ticketComment.TicketId = ViewBag.TicketId;
+            return View(ticketComment);
+            
         }
 
         // POST: TicketComments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Administrator, Developer, Submitter")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,TicketId,Comment,UserName,Created")] TicketComment ticketComment)
         {
             if (ModelState.IsValid)
             {
+                ticketComment.Created = DateTimeOffset.Now;
                 db.TicketComments.Add(ticketComment);
-              
-                db.TicketHistories.Add(new TicketHistory
-                {
-                    Property = "New Ticket Comment",
-                    Changed = DateTimeOffset.Now,
-                    UserName = User.Identity.Name,
-                    TicketId = ticketComment.TicketId,
-                    OldValue = " ",
-                    NewValue = ticketComment.Comment
-                });
-
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Edit", "Tickets", new { id = ticketComment.TicketId });
             }
 
             ViewBag.UserName = new SelectList(db.BTUsers, "UserName", "FirstName", ticketComment.UserName);
@@ -75,6 +82,7 @@ namespace BTracker.Controllers
         }
 
         // GET: TicketComments/Edit/5
+        [Authorize(Roles = "Administrator, Developer, Submitter, Demo")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -94,6 +102,7 @@ namespace BTracker.Controllers
         // POST: TicketComments/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Administrator, Developer, Submitter")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,TicketId,Comment,UserName,Created")] TicketComment ticketComment)
@@ -110,6 +119,7 @@ namespace BTracker.Controllers
         }
 
         // GET: TicketComments/Delete/5
+        [Authorize(Roles = "Administrator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -125,6 +135,7 @@ namespace BTracker.Controllers
         }
 
         // POST: TicketComments/Delete/5
+        [Authorize(Roles = "Administrator")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

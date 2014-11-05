@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "PViewNotifications";
+}
+
+
+
+<div class="form-group">
+    @*<h4>Ticket Notifiactions</h4>*@
+    <table>
+        <tr>
+            <th class="col-md-4">
+                Send Date
+            </th>
+            <th class="col-md-4">
+                Sent To
+            </th>
+            <th class="col-md-4">
+                Sent From
+            </th>
+            <th class="col-md-4">
+            </th>
+        </tr>
+    </table>
+    <div style="width:700px;height:80px;overflow:auto">
+        <table>
+            @foreach (var item in Model.TicketNotifications)
+            {
+                <tr>
+                    <td class="col-md-4">
+                        @item.SendDate.LocalDateTime
+                    </td>
+                    <td class="col-md-4">
+                        @item.SentToId
+                    </td>
+                    <td class="col-md-4">
+                        @item.SentFromId
+                    </td>
+                    <td class="col-md-4">
+                        @Html.ActionLink("Details", "Details", "TicketNotifications", new { id = item.Id, projectid = ViewBag.pid }, null)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+<hr />

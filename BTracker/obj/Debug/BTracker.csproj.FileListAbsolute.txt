@@ -107,6 +107,10 @@ C:\Users\Owner\Documents\GitHub\BTracker\BTracker\bin\EntityFramework.SqlServer.
 C:\Users\Owner\Documents\GitHub\BTracker\BTracker\bin\Microsoft.AspNet.Identity.Core.xml
 C:\Users\Owner\Documents\GitHub\BTracker\BTracker\bin\Microsoft.AspNet.Identity.Owin.xml
 C:\Users\Owner\Documents\GitHub\BTracker\BTracker\bin\Microsoft.AspNet.Identity.EntityFramework.xml
-C:\Users\Owner\Documents\GitHub\BTracker\BTracker\obj\Debug\BTracker.csprojResolveAssemblyReference.cache
 C:\Users\Owner\Documents\GitHub\BTracker\BTracker\obj\Debug\BTracker.dll
 C:\Users\Owner\Documents\GitHub\BTracker\BTracker\obj\Debug\BTracker.pdb
+C:\Users\Owner\Documents\GitHub\BTracker\BTracker\obj\Debug\BTracker.csprojResolveAssemblyReference.cache
+C:\Users\Owner\Documents\GitHub\BTracker\BTracker\bin\PagedList.dll
+C:\Users\Owner\Documents\GitHub\BTracker\BTracker\bin\PagedList.Mvc.dll
+C:\Users\Owner\Documents\GitHub\BTracker\BTracker\bin\PagedList.xml
+C:\Users\Owner\Documents\GitHub\BTracker\BTracker\bin\PagedList.Mvc.xml
