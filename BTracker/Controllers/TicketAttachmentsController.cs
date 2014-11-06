@@ -62,14 +62,19 @@ namespace BTracker.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,TicketId,FilePath,Description,Created,UserName,FileUrl")] TicketAttachment ticketAttachment, HttpPostedFileBase fileUpload)
-          //   public ActionResult Create([Bind(Include = "Id,TicketId,Description,UserName,FilePath,FileUrl,Created")] TicketAttachment ticketAttachment)
         {
             if (ModelState.IsValid)
             {
                 var fileName = Path.GetFileName(fileUpload.FileName);
-                ticketAttachment.FilePath = Path.Combine(Server.MapPath("~/Attachments/"), fileName);
+                var path = Server.MapPath("~/App_Data/Attachments/" + ticketAttachment.TicketId + '/');
+
+                ticketAttachment.FilePath = Path.Combine(path, fileName);
+
+                Directory.CreateDirectory(path);
+
                 fileUpload.SaveAs(ticketAttachment.FilePath);
-                ticketAttachment.FileUrl = "~/Attachments/" + fileName;
+
+                ticketAttachment.FileUrl = "~/App_Data/Attachments/" + fileName;
 
                 ticketAttachment.Created = DateTimeOffset.Now;
                 db.TicketAttachments.Add(ticketAttachment);

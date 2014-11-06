@@ -40,24 +40,19 @@ namespace BTracker.Controllers
 
         // GET: TicketComments/Create
         [Authorize(Roles = "Administrator, Developer, Submitter, Demo")]
-        public ActionResult Create(int? id)
+        public ActionResult Create(int id)
         {
-            //ViewBag.UserName = new SelectList(db.BTUsers, "UserName", "FirstName");
-            //ViewBag.TicketId = new SelectList(db.Tickets, "Id", "Title");
-            //return View();
+          
+            //Ticket ticket = db.Tickets.Find(id);
 
-            Ticket ticket = db.Tickets.Find(id);
-
-            TicketComment ticketComment = new TicketComment();
-            ticketComment.TicketId = ticket.Id;
-            ticketComment.UserName = ticket.BTUser.UserName;
-
-
-            //ViewBag.UserName = new SelectList(db.BTUsers, "UserName", "FirstName", ticketComment.UserName);
-            ViewBag.TicketId = id; // new SelectList(db.Tickets, "Id", "Title", ticketComment.TicketId);
-            //ticketComment.TicketId = ViewBag.TicketId;
+            var ticketComment = new TicketComment();
+            ticketComment.TicketId = id;
+            ticketComment.Ticket = db.Tickets.Find(id);
+            ticketComment.Created = DateTimeOffset.Now;
+            ticketComment.BTUser = db.BTUsers.Find(User.Identity.Name);
+            ticketComment.UserName = User.Identity.Name;
             return View(ticketComment);
-            
+
         }
 
         // POST: TicketComments/Create
